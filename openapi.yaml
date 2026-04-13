@@ -30,6 +30,11 @@ components:
           type: string
           enum: [tt01, tt02, tt03, tt04, tt05, tt06, tt07, tt08, tt09, ttihp0p2, ttihp0p4, ttihp25a, ttihp25b, ttihp26a, ttgf0p2, ttsky25a, ttsky25b, ttsky26a, ttgf26a, ttihp26b, ttsky26b, ttsky26c]
           example: tt08
+        flash:
+          type: string
+          format: byte
+          description: Base64 encoded Flash PMOD contents
+          example: "SGVsbG8gV29ybGQ="
         inputs:
           type: array
           items:
