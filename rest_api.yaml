@@ -1,0 +1,51 @@
+openapi: 3.0.0
+info:
+  title: Tiny Tapeout Gemini REST API
+  version: 1.0.0
+  description: API to interact with Tiny Tapeout hardware simulations and implementations.
+paths:
+  /pins:
+    get:
+      summary: Get current state of all pins
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PinState'
+  /pins/{pin_name}:
+    put:
+      summary: Set state of an input pin
+      parameters:
+        - name: pin_name
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                state:
+                  type: integer
+                  enum: [0, 1]
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    PinState:
+      type: object
+      properties:
+        ui_in:
+          type: integer
+          format: uint8
+        uo_out:
+          type: integer
+          format: uint8
+        uio:
+          type: integer
+          format: uint8
