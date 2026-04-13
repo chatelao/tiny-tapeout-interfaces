@@ -5,6 +5,7 @@ This repository defines the standard interfaces for accessing Tiny Tapeout imple
 ## Interfaces
 
 - [Pinout w. Address Selection](pinout_address.md)
+- [Serial Interface (UART)](tt_serial_protocol.md)
 - [Verilog Interface](verilog_interface.v)
 - [VGA with FLASH / SRAM Extension](vga_mem_interface.md)
 - [WASM Interface](wasm_interface.ts)

@@ -40,6 +40,9 @@ module tt_um_gemini_interface (
     // VGA + Memory Extension Placeholders
     // uio[0]: CS (Flash/SRAM)
     // uio[3]: SCK
+
+    // Serial Interface (UART)
+    // Design can optionally implement the TT_SERIAL protocol over UART.
     assign uio_oe = 8'b00000000; // All inputs by default
     assign uio_out = 8'b00000000;
 
