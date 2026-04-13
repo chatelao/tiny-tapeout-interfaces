@@ -2,7 +2,7 @@
 
 ## Reset
 Action:
-reset()
+set_rst_n(false)
 
 Expect:
 Design is in initial state.
