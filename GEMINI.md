@@ -17,3 +17,6 @@ This repository defines the interfaces to access "Tiny Tapeout" implementations.
 - `/test/<api-type>/install.sh` : To install tools necessary for the validation
 - `/test/<api-type>/run_tests.sh` : To
 - `/test/<api-type>/tests.md` : Appropriate test files with request / response pairs human readable, one test per chapter
+
+## Housekeeping
+- `/housekeeping/TOOL_WISHLIST.md` : Add tools to this list you needed to install during the work.
