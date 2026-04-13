@@ -7,6 +7,9 @@ paths:
   /pins:
     get:
       summary: Get current state of all pins
+      parameters:
+        - $ref: '#/components/parameters/target'
+        - $ref: '#/components/parameters/address'
       responses:
         '200':
           description: OK
@@ -23,6 +26,8 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: '#/components/parameters/target'
+        - $ref: '#/components/parameters/address'
       requestBody:
         content:
           application/json:
@@ -36,6 +41,19 @@ paths:
         '200':
           description: OK
 components:
+  parameters:
+    target:
+      name: target
+      in: query
+      description: Tiny Tapeout target chip (e.g., tt08, tt09, etc.)
+      schema:
+        type: string
+    address:
+      name: address
+      in: query
+      description: Address on the chip
+      schema:
+        type: integer
   schemas:
     PinState:
       type: object
