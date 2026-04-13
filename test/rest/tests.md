@@ -10,13 +10,15 @@ POST /simulation
       "ui_in": 85,
       "uio_in": 0,
       "ena": true,
-      "rst_n": true
+      "rst_n": true,
+      "clock": "0"
     },
     {
       "ui_in": 170,
       "uio_in": 0,
       "ena": true,
-      "rst_n": true
+      "rst_n": true,
+      "clock": "1"
     }
   ]
 }
@@ -48,7 +50,8 @@ POST /simulation
       "ui_in": 0,
       "uio_in": 0,
       "ena": true,
-      "rst_n": true
+      "rst_n": true,
+      "clock": "01"
     }
   ]
 }
