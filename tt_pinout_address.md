@@ -1,4 +1,4 @@
-# Pinout with Address Selection
+# tt_ Pinout with Address Selection
 
 This interface extends the basic GPIO pins with an address selection mechanism to access more than 8 bits of internal state.
 

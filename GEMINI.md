@@ -3,14 +3,14 @@
 This repository defines the interfaces to access "Tiny Tapeout" implementations.
 
 ## Content
-- Pinout w. address selection
-- Verilog interface
-- VGA interface with FLASH / SRAM extension
-- WASM interface
-- REST API
+- tt_ Pinout w. address selection
+- tt_ Verilog interface
+- tt_ VGA interface with FLASH / SRAM extension
+- tt_ WASM interface
+- tt_ REST API
 
 ## Structure
-- `/` : GEMINI.md, README.md and API definitions
+- `/` : GEMINI.md, README.md and tt_ interface definitions
 - `/specifications` : Downloaded specifications, converted once to Markdown after downloading
 - `/test` : CICD tests to verify the APIs are valid
 - `/test/common` : Tools to unify the test processes

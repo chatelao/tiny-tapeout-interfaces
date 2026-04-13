@@ -2,7 +2,7 @@
 
 ## Module Definition
 Component:
-tt_um_gemini_interface
+tt_tt_um_gemini_interface
 
 Expect:
 Inputs ui_in, ena, clk, rst_n exist.

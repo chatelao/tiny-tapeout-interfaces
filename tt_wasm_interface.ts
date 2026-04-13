@@ -1,7 +1,7 @@
 /**
  * WASM Interface for Tiny Tapeout Digital Twin
  */
-export interface DigitalTwin {
+export interface tt_DigitalTwin {
     /**
      * Sets the state of the 8-bit ui_in input bus.
      * @param value 8-bit integer

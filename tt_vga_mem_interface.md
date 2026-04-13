@@ -1,4 +1,4 @@
-# VGA Interface with FLASH / SRAM Extension
+# tt_ VGA Interface with FLASH / SRAM Extension
 
 Standard VGA output combined with an external memory interface for frame buffering or asset storage.
 

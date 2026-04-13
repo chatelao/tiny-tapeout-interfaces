@@ -1,4 +1,4 @@
-# Tiny Tapeout Serial Protocol (TT_SERIAL)
+# tt_ Tiny Tapeout Serial Protocol (TT_SERIAL)
 
 This document defines a simple, line-based protocol for communicating with Tiny
 Tapeout designs over WebSerial (UART).

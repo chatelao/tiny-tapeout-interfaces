@@ -1,8 +1,8 @@
 /*
- * Tiny Tapeout Verilog Interface
+ * tt_ Verilog Interface
  * Implementing Address Selection and placeholders for VGA/Memory
  */
-module tt_um_gemini_interface (
+module tt_tt_um_gemini_interface (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
