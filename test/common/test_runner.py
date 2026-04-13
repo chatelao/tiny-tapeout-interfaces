@@ -6,8 +6,8 @@ import requests
 
 def run_rest_test(test_name, section):
     print(f"Executing REST test: {test_name}")
-    request_match = re.search(r"Request:\n(GET|PUT|POST|DELETE) (\S+)(?:\n(\{.*\}))?", section, re.DOTALL)
-    response_match = re.search(r"Response:\n(\d+) (\w+)(?:\n(\{.*\}))?", section, re.DOTALL)
+    request_match = re.search(r"Request:\n(GET|PUT|POST|DELETE) (\S+)(?:\n(\{.*?\}(?=\n\n|\nResponse:|$)))?", section, re.DOTALL)
+    response_match = re.search(r"Response:\n(\d+) (\w+)(?:\n(\{.*?\}(?=\n\n|$)))?", section, re.DOTALL)
 
     if not request_match or not response_match:
         print(f"  FAILED: Could not parse request/response for {test_name}")
@@ -22,6 +22,8 @@ def run_rest_test(test_name, section):
             response = requests.get(url)
         elif method == "PUT":
             response = requests.put(url, json=json.loads(body))
+        elif method == "POST":
+            response = requests.post(url, json=json.loads(body))
 
         if response.status_code != int(expected_code):
             print(f"  FAILED: Expected {expected_code}, got {response.status_code}")

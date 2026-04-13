@@ -1,44 +1,56 @@
 # REST API Tests
 
-## Get Pin State
+## Batch Simulation
 Request:
-GET /pins
+POST /simulation
+{
+  "target": "tt08",
+  "inputs": [
+    {
+      "ui_in": 85,
+      "uio_in": 0,
+      "ena": true,
+      "rst_n": true
+    },
+    {
+      "ui_in": 170,
+      "uio_in": 0,
+      "ena": true,
+      "rst_n": true
+    }
+  ]
+}
 
 Response:
 200 OK
 {
-  "ui_in": 0,
-  "uo_out": 0,
-  "uio": 0
+  "target": "tt08",
+  "outputs": [
+    {
+      "uo_out": 85,
+      "uio_out": 0,
+      "uio_oe": 0
+    },
+    {
+      "uo_out": 170,
+      "uio_out": 0,
+      "uio_oe": 0
+    }
+  ]
 }
 
-## Set Pin State
+## Random Target Simulation
 Request:
-PUT /pins/ui_in
+POST /simulation
 {
-  "state": 1
-}
-
-Response:
-200 OK
-
-## Get Pin State with Target and Address
-Request:
-GET /pins?target=tt08&address=10
-
-Response:
-200 OK
-{
-  "ui_in": 1,
-  "uo_out": 0,
-  "uio": 0
-}
-
-## Set Pin State with Target and Address
-Request:
-PUT /pins/ui_in?target=tt08&address=10
-{
-  "state": 0
+  "inputs": [
+    {
+      "ui_in": 0,
+      "uio_in": 0,
+      "ena": true,
+      "rst_n": true
+    }
+  ]
 }
 
 Response:

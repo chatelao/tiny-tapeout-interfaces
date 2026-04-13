@@ -1,29 +1,34 @@
 from flask import Flask, jsonify, request
+import random
 
 app = Flask(__name__)
 
-pins = {
-    "ui_in": 0,
-    "uo_out": 0,
-    "uio": 0
-}
+TARGETS = ["tt01", "tt02", "tt03", "tt04", "tt05", "tt06", "tt07", "tt08", "tt09", "ttihp0p2", "ttihp0p4", "ttihp25a", "ttihp25b", "ttihp26a", "ttgf0p2", "ttsky25a", "ttsky25b", "ttsky26a", "ttgf26a", "ttihp26b", "ttsky26b", "ttsky26c"]
 
-@app.route('/pins', methods=['GET'])
-def get_pins():
-    target = request.args.get('target')
-    address = request.args.get('address')
-    # For mock purposes, we just return the pins regardless of target/address
-    return jsonify(pins)
-
-@app.route('/pins/<pin_name>', methods=['PUT'])
-def set_pin(pin_name):
-    if pin_name not in pins:
-        return "Not Found", 404
-    target = request.args.get('target')
-    address = request.args.get('address')
+@app.route('/simulation', methods=['POST'])
+def simulate():
     data = request.json
-    pins[pin_name] = data.get('state', pins[pin_name])
-    return "OK", 200
+    target = data.get('target')
+    if not target:
+        target = random.choice(TARGETS)
+
+    inputs = data.get('inputs', [])
+    outputs = []
+
+    # Simple mock simulation logic: reflect inputs or return constant for now
+    for input_state in inputs:
+        # Mocking output logic
+        output_state = {
+            "uo_out": input_state.get("ui_in", 0),
+            "uio_out": input_state.get("uio_in", 0),
+            "uio_oe": 0
+        }
+        outputs.append(output_state)
+
+    return jsonify({
+        "target": target,
+        "outputs": outputs
+    }), 200
 
 if __name__ == '__main__':
     app.run(port=5000)

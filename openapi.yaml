@@ -1,69 +1,78 @@
 openapi: 3.0.0
 info:
   title: Tiny Tapeout Gemini REST API
-  version: 1.0.0
-  description: API to interact with Tiny Tapeout hardware simulations and implementations.
+  version: 2.0.0
+  description: API to perform batch simulation of Tiny Tapeout hardware implementations.
 paths:
-  /pins:
-    get:
-      summary: Get current state of all pins
-      parameters:
-        - $ref: '#/components/parameters/target'
-        - $ref: '#/components/parameters/address'
+  /simulation:
+    post:
+      summary: Run a batch simulation
+      description: Apply a sequence of inputs and receive the resulting outputs. If target is omitted, a random board is selected.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimulationRequest'
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PinState'
-  /pins/{pin_name}:
-    put:
-      summary: Set state of an input pin
-      parameters:
-        - name: pin_name
-          in: path
-          required: true
-          schema:
-            type: string
-        - $ref: '#/components/parameters/target'
-        - $ref: '#/components/parameters/address'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                state:
-                  type: integer
-                  enum: [0, 1]
-      responses:
-        '200':
-          description: OK
+                $ref: '#/components/schemas/SimulationResponse'
 components:
-  parameters:
-    target:
-      name: target
-      in: query
-      description: Tiny Tapeout target chip (e.g., tt08, tt09, etc.)
-      schema:
-        type: string
-    address:
-      name: address
-      in: query
-      description: Address on the chip
-      schema:
-        type: integer
   schemas:
-    PinState:
+    SimulationRequest:
+      type: object
+      properties:
+        target:
+          type: string
+          enum: [tt01, tt02, tt03, tt04, tt05, tt06, tt07, tt08, tt09, ttihp0p2, ttihp0p4, ttihp25a, ttihp25b, ttihp26a, ttgf0p2, ttsky25a, ttsky25b, ttsky26a, ttgf26a, ttihp26b, ttsky26b, ttsky26c]
+          example: tt08
+        inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/InputState'
+    SimulationResponse:
+      type: object
+      properties:
+        target:
+          type: string
+          example: tt08
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputState'
+    InputState:
       type: object
       properties:
         ui_in:
           type: integer
           format: uint8
+          example: 0
+        uio_in:
+          type: integer
+          format: uint8
+          example: 0
+        ena:
+          type: boolean
+          example: true
+        rst_n:
+          type: boolean
+          example: true
+    OutputState:
+      type: object
+      properties:
         uo_out:
           type: integer
           format: uint8
-        uio:
+          example: 0
+        uio_out:
           type: integer
           format: uint8
+          example: 0
+        uio_oe:
+          type: integer
+          format: uint8
+          example: 0
