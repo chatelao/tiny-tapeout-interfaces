@@ -9,4 +9,4 @@ This repository defines the standard interfaces for accessing Tiny Tapeout imple
 - [Verilog Interface](verilog_interface.v)
 - [VGA with FLASH / SRAM Extension](vga_mem_interface.md)
 - [WASM Interface](wasm_interface.ts)
-- [REST API](rest_api.yaml) ([Online Documentation](https://chatelao.github.io/tiny-tapeout-interfaces/))
+- [REST API](openapi.yaml) ([Online Documentation](https://chatelao.github.io/tiny-tapeout-interfaces/))

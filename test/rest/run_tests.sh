@@ -15,6 +15,6 @@ RESULT=$?
 kill $SERVER_PID
 
 # Also validate the OpenAPI spec
-openapi-spec-validator ../../rest_api.yaml
+openapi-spec-validator ../../openapi.yaml
 
 exit $RESULT
