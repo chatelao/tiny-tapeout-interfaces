@@ -8,7 +8,7 @@ Tapeout designs over WebSerial (UART).
 a newline character (`\n`).
 - **Synchronous**: Every request receives exactly one line of response from the
 device.
-- **Hex-/Bin-/Dec-encoded**: Data is represented as hexadecimal strings to ensure readability and compatibility.
+- **Hex-/Bin-/Dec-/Oct-encoded**: Data can be represented in various bases (hex, bin, dec, oct) to ensure flexibility and compatibility.
 - **csv-compatible**: Data is easy processable in Excel / Spreadsheets
 
 ## Transaction Command
@@ -26,8 +26,8 @@ Short Format, elements omitted at the end of the line are kept to the same value
 - `[ui_in];[clk_in];[uio_in];[rst_n_in];[ena_in]\n`
 
 Values:
-- `ui_in` : dec, hex or bin Input data for the `ui_in[7:0]` pins.
-- `uio_in` : dec, hex or bin Input data for `uio_in[7:0]` pins.
+- `ui_in` : Input data for the `ui_in[7:0]` pins. Supported formats: Decimal (e.g., `85`), Hexadecimal (prefix `0x`, e.g., `0x55`), Binary (prefix `0b`, e.g., `0b01010101`), and Octal (prefix `0o`, e.g., `0o125`).
+- `uio_in` : Input data for `uio_in[7:0]` pins. Same supported formats as `ui_in`.
 - `clk`, `rst_n`, `ena` : binary signals, allowing '0/1 '-/+', 'false/true', 'low/high'
 
 ### Response Format
@@ -51,6 +51,10 @@ Device responds: `uo;00;uio;00;uio_oe;00\n`
 
 ### Short Format Transaction
 Host sends: `0xAA;1;0x00;1;1\n`
+Device responds: `uo;00;uio;00;uio_oe;00\n`
+
+### Transaction with Mixed Number Formats
+Host sends: `ui;0b10101010;uio;0o123;clk;1;rst_n;1;ena;1\n`
 Device responds: `uo;00;uio;00;uio_oe;00\n`
 
 ### Special Commands
