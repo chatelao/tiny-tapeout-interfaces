@@ -66,6 +66,10 @@ components:
         rst_n:
           type: boolean
           example: true
+        clock:
+          type: string
+          enum: ['0', '1', '01', '10']
+          example: '0'
     OutputState:
       type: object
       properties:
