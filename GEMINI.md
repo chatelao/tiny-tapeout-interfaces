@@ -10,6 +10,10 @@ This repository defines the interfaces to access "Tiny Tapeout" implementations.
 - REST API
 
 ## Structure
-- `/` : GEMINI.md, README.md and definitions
+- `/` : GEMINI.md, README.md and API definitions
+- `/specifications` : Downloaded specifications, converted once to Markdown after downloading
 - `/test` : CICD tests to verify the APIs are valid
-- `/specifications` : Underlying specifications like from Tiny-Tapeout, PMOD, FPGAs, etc.
+- `/test/common` : Tools to unify the test processes
+- `/test/<api-type>/install.sh` : To install tools necessary for the validation
+- `/test/<api-type>/run_tests.sh` : To
+- `/test/<api-type>/tests.md` : Appropriate test files with request / response pairs human readable, one test per chapter
