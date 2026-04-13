@@ -10,12 +10,17 @@ pins = {
 
 @app.route('/pins', methods=['GET'])
 def get_pins():
+    target = request.args.get('target')
+    address = request.args.get('address')
+    # For mock purposes, we just return the pins regardless of target/address
     return jsonify(pins)
 
 @app.route('/pins/<pin_name>', methods=['PUT'])
 def set_pin(pin_name):
     if pin_name not in pins:
         return "Not Found", 404
+    target = request.args.get('target')
+    address = request.args.get('address')
     data = request.json
     pins[pin_name] = data.get('state', pins[pin_name])
     return "OK", 200
