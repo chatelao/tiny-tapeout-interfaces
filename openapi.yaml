@@ -26,6 +26,7 @@ paths:
           required: true
           schema:
             type: string
+            enum: [ui_in, uo_out, uio]
         - $ref: '#/components/parameters/target'
         - $ref: '#/components/parameters/address'
       requestBody:
@@ -48,6 +49,7 @@ components:
       description: Tiny Tapeout target chip (e.g., tt08, tt09, etc.)
       schema:
         type: string
+        enum: [tt08, tt09]
     address:
       name: address
       in: query
