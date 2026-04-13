@@ -27,6 +27,12 @@ export interface DigitalTwin {
     set_rst_n(value: boolean): void;
 
     /**
+     * Sets the Flash PMOD contents.
+     * @param data Uint8Array containing the flash data
+     */
+    set_flash(data: Uint8Array): void;
+
+    /**
      * Advances the simulation by one clock cycle.
      */
     step(): void;

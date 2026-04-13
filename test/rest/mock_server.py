@@ -13,6 +13,7 @@ def simulate():
         target = random.choice(TARGETS)
 
     inputs = data.get('inputs', [])
+    flash = data.get('flash')
     outputs = []
 
     # Simple mock simulation logic: reflect inputs or return constant for now
@@ -25,10 +26,14 @@ def simulate():
         }
         outputs.append(output_state)
 
-    return jsonify({
+    response = {
         "target": target,
         "outputs": outputs
-    }), 200
+    }
+    if flash:
+        response["flash"] = flash
+
+    return jsonify(response), 200
 
 if __name__ == '__main__':
     app.run(port=5000)
