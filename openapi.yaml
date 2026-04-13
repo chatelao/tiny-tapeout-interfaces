@@ -27,6 +27,7 @@ paths:
           schema:
             type: string
             enum: [ui_in, uo_out, uio]
+            example: ui_in
         - $ref: '#/components/parameters/target'
         - $ref: '#/components/parameters/address'
       requestBody:
@@ -38,6 +39,7 @@ paths:
                 state:
                   type: integer
                   enum: [0, 1]
+                  example: 1
       responses:
         '200':
           description: OK
@@ -46,16 +48,18 @@ components:
     target:
       name: target
       in: query
-      description: Tiny Tapeout target chip (e.g., tt08, tt09, etc.)
+      description: Tiny Tapeout target chip
       schema:
         type: string
-        enum: [tt08, tt09]
+        enum: [tt01, tt02, tt03, tt04, tt05, tt06, tt07, tt08, tt09, ttihp0p2, ttihp0p4, ttihp25a, ttihp25b, ttihp26a, ttgf0p2, ttsky25a, ttsky25b, ttsky26a, ttgf26a, ttihp26b, ttsky26b, ttsky26c]
+        example: tt08
     address:
       name: address
       in: query
       description: Address on the chip
       schema:
         type: integer
+        example: 0
   schemas:
     PinState:
       type: object
@@ -63,9 +67,12 @@ components:
         ui_in:
           type: integer
           format: uint8
+          example: 0
         uo_out:
           type: integer
           format: uint8
+          example: 0
         uio:
           type: integer
           format: uint8
+          example: 0
