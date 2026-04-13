@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: '18'
       - name: Build Docs
-        run: npx @redocly/cli build-docs rest_api.yaml -o index.html
+        run: npx @redocly/cli build-docs openapi.yaml -o index.html
       - name: Prepare for deployment
         run: |
           mkdir -p public
