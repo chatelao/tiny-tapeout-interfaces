@@ -2,86 +2,219 @@ openapi: 3.0.0
 info:
   title: Tiny Tapeout Gemini REST API
   version: 2.0.0
-  description: API to perform batch simulation of Tiny Tapeout hardware implementations.
+  description: API to perform batch testing of Tiny Tapeout hardware implementations.
 paths:
   /simulation:
     post:
-      summary: Run a batch simulation
+      summary: Run a batch test
       description: Apply a sequence of inputs and receive the resulting outputs. If target is omitted, a random board is selected.
       requestBody:
+        description: Batch of input states and optional configuration.
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/SimulationRequest'
+            examples:
+              vga:
+                summary: VGA Example
+                description: Testing a VGA design with memory extension.
+                value:
+                  target: tt08
+                  address: 10
+                  inputs:
+                    - ui_in: 0
+                      uio_in: 255
+                      ena: true
+                      rst_n: true
+                      clock: "01"
+              cpu:
+                summary: CPU Example
+                description: Testing a CPU with initial program in Flash.
+                value:
+                  target: tt08
+                  address: 20
+                  flash: "SGVsbG8="
+                  inputs:
+                    - rst_n: false
+                      clock: "01"
+                    - rst_n: true
+                      clock: "01"
+              clocked:
+                summary: Clocked Example
+                description: A simple clocked design test.
+                value:
+                  target: tt08
+                  inputs:
+                    - ui_in: 1
+                      clock: "01"
+                    - ui_in: 2
+                      clock: "01"
+              non_clocked:
+                summary: Non-clocked Example
+                description: Combinational logic test.
+                value:
+                  target: tt08
+                  inputs:
+                    - ui_in: 10
+                    - ui_in: 20
+              fp8_multiplier:
+                summary: FP8 Multiplier Example
+                description: Testing the FP8 multiply-accumulate unit.
+                value:
+                  target: ttihp26a
+                  address: 489
+                  inputs:
+                    - ui_in: 170
+                      ena: true
+                      rst_n: true
       responses:
         '200':
-          description: OK
+          description: Successful test execution.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SimulationResponse'
+              examples:
+                vga:
+                  summary: VGA Response
+                  value:
+                    target: tt08
+                    address: 10
+                    outputs:
+                      - uo_out: 129
+                        uio_out: 0
+                        uio_oe: 255
+                cpu:
+                  summary: CPU Response
+                  value:
+                    target: tt08
+                    address: 20
+                    outputs:
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 1
+                        uio_out: 0
+                        uio_oe: 0
+                clocked:
+                  summary: Clocked Response
+                  value:
+                    target: tt08
+                    outputs:
+                      - uo_out: 2
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 4
+                        uio_out: 0
+                        uio_oe: 0
+                non_clocked:
+                  summary: Non-clocked Response
+                  value:
+                    target: tt08
+                    outputs:
+                      - uo_out: 20
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 40
+                        uio_out: 0
+                        uio_oe: 0
+                fp8_multiplier:
+                  summary: FP8 Multiplier Response
+                  value:
+                    target: ttihp26a
+                    address: 489
+                    outputs:
+                      - uo_out: 85
+                        uio_out: 0
+                        uio_oe: 0
 components:
   schemas:
     SimulationRequest:
       type: object
+      description: Request to run a batch of tests on a specific target board.
       properties:
         target:
           type: string
+          description: The Tiny Tapeout chip or fabrication target.
           enum: [tt01, tt02, tt03, tt04, tt05, tt06, tt07, tt08, tt09, ttihp0p2, ttihp0p4, ttihp25a, ttihp25b, ttihp26a, ttgf0p2, ttsky25a, ttsky25b, ttsky26a, ttgf26a, ttihp26b, ttsky26b, ttsky26c]
           example: tt08
+        address:
+          type: integer
+          format: uint16
+          description: Address to select a specific circuit implementation on the board.
+          example: 0
         flash:
           type: string
           format: byte
-          description: Base64 encoded Flash PMOD contents
+          description: Base64 encoded Flash PMOD contents to be loaded before testing.
           example: "SGVsbG8gV29ybGQ="
         inputs:
           type: array
+          description: A sequence of input states to apply to the hardware.
           items:
             $ref: '#/components/schemas/InputState'
     SimulationResponse:
       type: object
+      description: Result of the batch test execution.
       properties:
         target:
           type: string
+          description: The target board used for the test.
           example: tt08
+        address:
+          type: integer
+          format: uint16
+          description: The selected circuit address.
+          example: 0
         outputs:
           type: array
+          description: The sequence of output states corresponding to the inputs.
           items:
             $ref: '#/components/schemas/OutputState'
     InputState:
       type: object
+      description: State of the input pins for a single test step.
       properties:
         ui_in:
           type: integer
           format: uint8
+          description: 8-bit dedicated input bus.
           example: 0
         uio_in:
           type: integer
           format: uint8
+          description: 8-bit bidirectional bus used as input.
           example: 0
         ena:
           type: boolean
+          description: Enable signal.
           example: true
         rst_n:
           type: boolean
+          description: Active-low reset signal.
           example: true
         clock:
           type: string
           enum: ['0', '1', '01', '10']
+          description: Clock transition to apply ('0', '1', '01' for rising edge, '10' for falling edge).
           example: '0'
     OutputState:
       type: object
+      description: State of the output pins after a test step.
       properties:
         uo_out:
           type: integer
           format: uint8
+          description: 8-bit dedicated output bus.
           example: 0
         uio_out:
           type: integer
           format: uint8
+          description: 8-bit bidirectional bus used as output.
           example: 0
         uio_oe:
           type: integer
           format: uint8
+          description: 8-bit output enable signals for the bidirectional bus.
           example: 0
