@@ -6,17 +6,19 @@ app = Flask(__name__)
 TARGETS = ["tt01", "tt02", "tt03", "tt04", "tt05", "tt06", "tt07", "tt08", "tt09", "ttihp0p2", "ttihp0p4", "ttihp25a", "ttihp25b", "ttihp26a", "ttgf0p2", "ttsky25a", "ttsky25b", "ttsky26a", "ttgf26a", "ttihp26b", "ttsky26b", "ttsky26c"]
 
 @app.route('/simulation', methods=['POST'])
-def simulate():
+def test():
     data = request.json
     target = data.get('target')
     if not target:
         target = random.choice(TARGETS)
 
+    address = data.get('address', 0)
+
     inputs = data.get('inputs', [])
     flash = data.get('flash')
     outputs = []
 
-    # Simple mock simulation logic: reflect inputs or return constant for now
+    # Simple mock testing logic: reflect inputs or return constant for now
     for input_state in inputs:
         # Mocking output logic
         output_state = {
@@ -28,6 +30,7 @@ def simulate():
 
     response = {
         "target": target,
+        "address": address,
         "outputs": outputs
     }
     if flash:

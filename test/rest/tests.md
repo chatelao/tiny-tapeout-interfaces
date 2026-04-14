@@ -1,10 +1,11 @@
 # REST API Tests
 
-## Batch Simulation
+## Batch testing
 Request:
 POST /simulation
 {
   "target": "tt08",
+  "address": 1,
   "inputs": [
     {
       "ui_in": 85,
@@ -27,6 +28,7 @@ Response:
 200 OK
 {
   "target": "tt08",
+  "address": 1,
   "outputs": [
     {
       "uo_out": 85,
@@ -41,7 +43,7 @@ Response:
   ]
 }
 
-## Random Target Simulation
+## Random Target testing
 Request:
 POST /simulation
 {
@@ -59,7 +61,7 @@ POST /simulation
 Response:
 200 OK
 
-## Simulation with Flash PMOD contents
+## testing with Flash PMOD contents
 Request:
 POST /simulation
 {
@@ -79,6 +81,7 @@ Response:
 200 OK
 {
   "target": "tt08",
+  "address": 0,
   "flash": "SGVsbG8gV29ybGQ=",
   "outputs": [
     {

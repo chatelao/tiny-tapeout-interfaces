@@ -96,33 +96,52 @@ paths:
                   - Cycle 2: Scale B (1.0 scale = 0x7F) and Config B (E4M3 = 0x00)
                   - Cycles 3-34: Data Streaming (32 pairs of 1.0 in E4M3 = 0x38)
                   - Cycles 35-36: Pipeline flush
-                  - Cycles 37-40: Result read (32-bit result)
+                  - Cycles 37-40: Result read (32-bit result: 0x00002000 = 32.0)
                 value:
                   target: ttihp26a
                   address: 489
                   inputs:
-                    - ui_in: 0    # Cycle 0: Metadata 0 (Standard start)
-                      uio_in: 0   # Cycle 0: Metadata 1 (Standard start)
-                      clock: "01"
-                    - ui_in: 127  # Cycle 1: Scale A (0x7F = 1.0)
-                      uio_in: 0   # Cycle 1: Config A (0x00 = E4M3)
-                      clock: "01"
-                    - ui_in: 127  # Cycle 2: Scale B (0x7F = 1.0)
-                      uio_in: 0   # Cycle 2: Config B (0x00 = E4M3)
-                      clock: "01"
-                    - ui_in: 56   # Cycle 3: Element A0 (0x38 = 1.0)
-                      uio_in: 56  # Cycle 3: Element B0 (0x38 = 1.0)
-                      clock: "01"
-                    - ui_in: 56   # Cycle 4: Element A1 (0x38 = 1.0)
-                      uio_in: 56  # Cycle 4: Element B1 (0x38 = 1.0)
-                      clock: "01"
-                    # ... (remaining 30 element pairs omitted for brevity in this example value)
-                    - clock: "01" # Cycle 35: Flush
-                    - clock: "01" # Cycle 36: Flush
-                    - clock: "01" # Cycle 37: Result byte 3
-                    - clock: "01" # Cycle 38: Result byte 2
-                    - clock: "01" # Cycle 39: Result byte 1
-                    - clock: "01" # Cycle 40: Result byte 0
+                    - {ui_in: 0, uio_in: 0, clock: "01"}
+                    - {ui_in: 127, uio_in: 0, clock: "01"}
+                    - {ui_in: 127, uio_in: 0, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {ui_in: 56, uio_in: 56, clock: "01"}
+                    - {clock: "01"}
+                    - {clock: "01"}
+                    - {clock: "01"}
+                    - {clock: "01"}
+                    - {clock: "01"}
+                    - {clock: "01"}
       responses:
         '200':
           description: Test successfully completed.
@@ -137,29 +156,21 @@ paths:
                   value:
                     target: tt08
                     address: 0
+                    flash: "SGVsbG8gV29ybGQ="
                     outputs:
-                      - uo_out: 0
-                        uio_out: 0
-                        uio_oe: 0
-                      - uo_out: 1
-                        uio_out: 0
-                        uio_oe: 0
+                      - {uo_out: 0, uio_out: 0, uio_oe: 0}
+                      - {uo_out: 1, uio_out: 0, uio_oe: 0}
                 cpu_response:
                   summary: CPU Response
                   description: Expected outputs for the CPU core test.
                   value:
                     target: tt08
                     address: 1
+                    flash: "YmFzZTY0LWVuY29kZWQtYmluYXJ5LWNvZGU="
                     outputs:
-                      - uo_out: 0
-                        uio_out: 0
-                        uio_oe: 0
-                      - uo_out: 42
-                        uio_out: 0
-                        uio_oe: 0
-                      - uo_out: 43
-                        uio_out: 0
-                        uio_oe: 0
+                      - {uo_out: 0, uio_out: 0, uio_oe: 0}
+                      - {uo_out: 42, uio_out: 0, uio_oe: 0}
+                      - {uo_out: 43, uio_out: 0, uio_oe: 0}
                 clocked_response:
                   summary: Clocked Response
                   description: Expected outputs for the clocked counter test.
@@ -167,15 +178,9 @@ paths:
                     target: tt08
                     address: 2
                     outputs:
-                      - uo_out: 1
-                        uio_out: 0
-                        uio_oe: 0
-                      - uo_out: 2
-                        uio_out: 0
-                        uio_oe: 0
-                      - uo_out: 3
-                        uio_out: 0
-                        uio_oe: 0
+                      - {uo_out: 1, uio_out: 0, uio_oe: 0}
+                      - {uo_out: 2, uio_out: 0, uio_oe: 0}
+                      - {uo_out: 3, uio_out: 0, uio_oe: 0}
                 non_clocked_response:
                   summary: Non-clocked Response
                   description: Expected outputs for the combinatorial logic test.
@@ -183,15 +188,9 @@ paths:
                     target: tt08
                     address: 3
                     outputs:
-                      - uo_out: 0
-                        uio_out: 0
-                        uio_oe: 0
-                      - uo_out: 0
-                        uio_out: 0
-                        uio_oe: 0
-                      - uo_out: 1
-                        uio_out: 0
-                        uio_oe: 0
+                      - {uo_out: 0, uio_out: 0, uio_oe: 0}
+                      - {uo_out: 0, uio_out: 0, uio_oe: 0}
+                      - {uo_out: 1, uio_out: 0, uio_oe: 0}
                 fp8_multiplier_response:
                   summary: FP8 Multiplier Response
                   description: |
@@ -201,18 +200,47 @@ paths:
                     target: ttihp26a
                     address: 489
                     outputs:
-                      - uo_out: 0 # Cycle 0
-                      - uo_out: 0 # Cycle 1
-                      - uo_out: 0 # Cycle 2
-                      - uo_out: 0 # Cycle 3
-                      - uo_out: 0 # Cycle 4
-                      # ... (omitted)
-                      - uo_out: 0 # Cycle 35
-                      - uo_out: 0 # Cycle 36
-                      - uo_out: 0 # Cycle 37: Result[31:24]
-                      - uo_out: 0 # Cycle 38: Result[23:16]
-                      - uo_out: 32 # Cycle 39: Result[15:8] (0x20)
-                      - uo_out: 0 # Cycle 40: Result[7:0]
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0}
+                      - {uo_out: 0} # Result[31:24]
+                      - {uo_out: 0} # Result[23:16]
+                      - {uo_out: 32} # Result[15:8] (0x20)
+                      - {uo_out: 0} # Result[7:0]
 components:
   schemas:
     SimulationRequest:
@@ -256,6 +284,13 @@ components:
           type: integer
           description: The address of the design that was tested.
           example: 0
+        flash:
+          type: string
+          format: byte
+          description: |
+            A Base64 encoded string representing the initial contents of the Flash PMOD.
+            Reflects the 'flash' input provided in the request.
+          example: "SGVsbG8gV29ybGQ="
         outputs:
           type: array
           description: |

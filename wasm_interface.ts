@@ -38,7 +38,7 @@ export interface DigitalTwin {
     set_flash(data: Uint8Array): void;
 
     /**
-     * Advances the simulation by one clock cycle.
+     * Advances the testing by one clock cycle.
      */
     step(): void;
 
