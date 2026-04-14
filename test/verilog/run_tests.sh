@@ -3,4 +3,4 @@
 echo "Running Verilog tests..."
 python3 ../common/test_runner.py tests.md
 # Also syntax check the verilog file
-iverilog -t null ../../verilog_interface.v
+iverilog -t null ../../tt_verilog_interface.v
