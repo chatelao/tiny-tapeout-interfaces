@@ -2,86 +2,205 @@ openapi: 3.0.0
 info:
   title: Tiny Tapeout Gemini REST API
   version: 2.0.0
-  description: API to perform batch simulation of Tiny Tapeout hardware implementations.
+  description: |
+    API to perform batch simulation of Tiny Tapeout hardware implementations.
+    This API allows users to send a sequence of input states and receive the corresponding output states,
+    simulating the behavior of the hardware on various Tiny Tapeout chips.
 paths:
   /simulation:
     post:
       summary: Run a batch simulation
-      description: Apply a sequence of inputs and receive the resulting outputs. If target is omitted, a random board is selected.
+      description: |
+        Apply a sequence of inputs to a specified Tiny Tapeout target and receive the resulting outputs.
+        If the 'target' is omitted, the server will select a random available board from the supported list.
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/SimulationRequest'
+            examples:
+              vga_example:
+                summary: VGA Example
+                description: |
+                  Simulation of a VGA driver. This example includes initial Flash PMOD contents
+                  representing image assets or program code, and a reset sequence followed by a clock pulse.
+                value:
+                  target: tt08
+                  flash: "SGVsbG8gV29ybGQ="
+                  inputs:
+                    - ui_in: 0
+                      uio_in: 0
+                      ena: true
+                      rst_n: false
+                      clock: "0"
+                    - ui_in: 0
+                      uio_in: 0
+                      ena: true
+                      rst_n: true
+                      clock: "01"
+              cpu_example:
+                summary: CPU Example
+                description: |
+                  Simulation of a CPU core. The 'flash' field is used to load the CPU's program memory.
+                  The input sequence shows a typical power-on reset followed by several execution cycles.
+                value:
+                  target: tt08
+                  flash: "YmFzZTY0LWVuY29kZWQtYmluYXJ5LWNvZGU="
+                  inputs:
+                    - ena: true
+                      rst_n: false
+                      clock: "0"
+                    - ena: true
+                      rst_n: true
+                      clock: "01"
+                    - ena: true
+                      rst_n: true
+                      clock: "01"
+              clocked_example:
+                summary: Clocked Example
+                description: |
+                  A simple clocked design, such as a counter. Each entry in the 'inputs' array
+                  represents a state where the clock undergoes a '0' to '1' transition ('01').
+                value:
+                  target: tt08
+                  inputs:
+                    - clock: "01"
+                    - clock: "01"
+                    - clock: "01"
+              non_clocked_example:
+                summary: Non-clocked Example
+                description: |
+                  Simulation of combinatorial logic (e.g., an AND gate). The 'clock' is held at '0'
+                  while different values are applied to the 'ui_in' inputs.
+                value:
+                  target: tt08
+                  inputs:
+                    - ui_in: 0
+                      clock: "0"
+                    - ui_in: 1
+                      clock: "0"
+                    - ui_in: 3
+                      clock: "0"
       responses:
         '200':
-          description: OK
+          description: Simulation successfully completed.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SimulationResponse'
+              examples:
+                success_response:
+                  summary: Success Response
+                  description: The resulting output states for the provided input sequence.
+                  value:
+                    target: tt08
+                    outputs:
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 85
+                        uio_out: 0
+                        uio_oe: 0
 components:
   schemas:
     SimulationRequest:
       type: object
+      description: Encapsulates all parameters required for a batch simulation.
       properties:
         target:
           type: string
+          description: |
+            The specific Tiny Tapeout chip or fabrication target.
+            If not specified, the backend selects a random target from the supported list.
           enum: [tt01, tt02, tt03, tt04, tt05, tt06, tt07, tt08, tt09, ttihp0p2, ttihp0p4, ttihp25a, ttihp25b, ttihp26a, ttgf0p2, ttsky25a, ttsky25b, ttsky26a, ttgf26a, ttihp26b, ttsky26b, ttsky26c]
           example: tt08
         flash:
           type: string
           format: byte
-          description: Base64 encoded Flash PMOD contents
+          description: |
+            A Base64 encoded string representing the initial contents of the Flash PMOD.
+            This is used by designs that read from external memory during simulation.
           example: "SGVsbG8gV29ybGQ="
         inputs:
           type: array
+          description: A sequence of input states to be applied to the design sequentially.
           items:
             $ref: '#/components/schemas/InputState'
     SimulationResponse:
       type: object
+      description: Contains the results of the batch simulation.
       properties:
         target:
           type: string
+          description: The target chip that was used for the simulation.
           example: tt08
         outputs:
           type: array
+          description: |
+            The sequence of output states corresponding to the input states provided in the request.
+            The length of this array will match the length of the 'inputs' array in the request.
           items:
             $ref: '#/components/schemas/OutputState'
     InputState:
       type: object
+      description: Represents the state of all input pins at a specific point in time.
       properties:
         ui_in:
           type: integer
           format: uint8
+          description: |
+            The 8-bit value to be applied to the dedicated input pins (ui_in[7:0]).
+            Must be an integer between 0 and 255.
           example: 0
         uio_in:
           type: integer
           format: uint8
+          description: |
+            The 8-bit value to be applied to the bidirectional I/O pins (uio[7:0]) when they are in input mode.
+            Must be an integer between 0 and 255.
           example: 0
         ena:
           type: boolean
+          description: |
+            The state of the 'enable' pin. When true, the design is active.
           example: true
         rst_n:
           type: boolean
+          description: |
+            The state of the active-low reset pin ('rst_n').
+            Setting this to false will trigger a reset of the design.
           example: true
         clock:
           type: string
+          description: |
+            Specifies the clock behavior for this step.
+            - '0': Clock is held low.
+            - '1': Clock is held high.
+            - '01': A rising edge (low then high) is applied.
+            - '10': A falling edge (high then low) is applied.
           enum: ['0', '1', '01', '10']
           example: '0'
     OutputState:
       type: object
+      description: Represents the state of all output pins after an input state has been applied.
       properties:
         uo_out:
           type: integer
           format: uint8
+          description: |
+            The 8-bit value from the dedicated output pins (uo_out[7:0]).
           example: 0
         uio_out:
           type: integer
           format: uint8
+          description: |
+            The 8-bit value from the bidirectional I/O pins (uio[7:0]).
           example: 0
         uio_oe:
           type: integer
           format: uint8
+          description: |
+            The 8-bit output enable mask for the bidirectional I/O pins.
+            A '1' at a bit position indicates that the corresponding uio pin is in output mode.
           example: 0
