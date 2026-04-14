@@ -3,13 +3,13 @@ info:
   title: Tiny Tapeout Gemini REST API
   version: 2.0.0
   description: |
-    API to perform batch simulation of Tiny Tapeout hardware implementations.
+    API to perform batch testing of Tiny Tapeout hardware implementations.
     This API allows users to send a sequence of input states and receive the corresponding output states,
-    simulating the behavior of the hardware on various Tiny Tapeout chips.
+    testing the behavior of the hardware on various Tiny Tapeout chips.
 paths:
   /simulation:
     post:
-      summary: Run a batch simulation
+      summary: Run a batch test
       description: |
         Apply a sequence of inputs to a specified Tiny Tapeout target and receive the resulting outputs.
         If the 'target' is omitted, the server will select a random available board from the supported list.
@@ -23,10 +23,11 @@ paths:
               vga_example:
                 summary: VGA Example
                 description: |
-                  Simulation of a VGA driver. This example includes initial Flash PMOD contents
+                  Testing of a VGA driver. This example includes initial Flash PMOD contents
                   representing image assets or program code, and a reset sequence followed by a clock pulse.
                 value:
                   target: tt08
+                  address: 0
                   flash: "SGVsbG8gV29ybGQ="
                   inputs:
                     - ui_in: 0
@@ -42,10 +43,11 @@ paths:
               cpu_example:
                 summary: CPU Example
                 description: |
-                  Simulation of a CPU core. The 'flash' field is used to load the CPU's program memory.
+                  Testing of a CPU core. The 'flash' field is used to load the CPU's program memory.
                   The input sequence shows a typical power-on reset followed by several execution cycles.
                 value:
                   target: tt08
+                  address: 1
                   flash: "YmFzZTY0LWVuY29kZWQtYmluYXJ5LWNvZGU="
                   inputs:
                     - ena: true
@@ -64,6 +66,7 @@ paths:
                   represents a state where the clock undergoes a '0' to '1' transition ('01').
                 value:
                   target: tt08
+                  address: 2
                   inputs:
                     - clock: "01"
                     - clock: "01"
@@ -71,10 +74,11 @@ paths:
               non_clocked_example:
                 summary: Non-clocked Example
                 description: |
-                  Simulation of combinatorial logic (e.g., an AND gate). The 'clock' is held at '0'
+                  Testing of combinatorial logic (e.g., an AND gate). The 'clock' is held at '0'
                   while different values are applied to the 'ui_in' inputs.
                 value:
                   target: tt08
+                  address: 3
                   inputs:
                     - ui_in: 0
                       clock: "0"
@@ -84,29 +88,78 @@ paths:
                       clock: "0"
       responses:
         '200':
-          description: Simulation successfully completed.
+          description: Test successfully completed.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SimulationResponse'
               examples:
-                success_response:
-                  summary: Success Response
-                  description: The resulting output states for the provided input sequence.
+                vga_response:
+                  summary: VGA Response
+                  description: Expected outputs for the VGA driver test.
                   value:
                     target: tt08
+                    address: 0
                     outputs:
                       - uo_out: 0
                         uio_out: 0
                         uio_oe: 0
-                      - uo_out: 85
+                      - uo_out: 1
+                        uio_out: 0
+                        uio_oe: 0
+                cpu_response:
+                  summary: CPU Response
+                  description: Expected outputs for the CPU core test.
+                  value:
+                    target: tt08
+                    address: 1
+                    outputs:
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 42
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 43
+                        uio_out: 0
+                        uio_oe: 0
+                clocked_response:
+                  summary: Clocked Response
+                  description: Expected outputs for the clocked counter test.
+                  value:
+                    target: tt08
+                    address: 2
+                    outputs:
+                      - uo_out: 1
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 2
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 3
+                        uio_out: 0
+                        uio_oe: 0
+                non_clocked_response:
+                  summary: Non-clocked Response
+                  description: Expected outputs for the combinatorial logic test.
+                  value:
+                    target: tt08
+                    address: 3
+                    outputs:
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 1
                         uio_out: 0
                         uio_oe: 0
 components:
   schemas:
     SimulationRequest:
       type: object
-      description: Encapsulates all parameters required for a batch simulation.
+      description: Encapsulates all parameters required for a batch test.
       properties:
         target:
           type: string
@@ -115,12 +168,18 @@ components:
             If not specified, the backend selects a random target from the supported list.
           enum: [tt01, tt02, tt03, tt04, tt05, tt06, tt07, tt08, tt09, ttihp0p2, ttihp0p4, ttihp25a, ttihp25b, ttihp26a, ttgf0p2, ttsky25a, ttsky25b, ttsky26a, ttgf26a, ttihp26b, ttsky26b, ttsky26c]
           example: tt08
+        address:
+          type: integer
+          description: |
+            The address of the design on the board.
+            Used to select the specific circuit to be tested when multiple designs are multiplexed on the same chip.
+          example: 0
         flash:
           type: string
           format: byte
           description: |
             A Base64 encoded string representing the initial contents of the Flash PMOD.
-            This is used by designs that read from external memory during simulation.
+            This is used by designs that read from external memory during testing.
           example: "SGVsbG8gV29ybGQ="
         inputs:
           type: array
@@ -129,12 +188,16 @@ components:
             $ref: '#/components/schemas/InputState'
     SimulationResponse:
       type: object
-      description: Contains the results of the batch simulation.
+      description: Contains the results of the batch test.
       properties:
         target:
           type: string
-          description: The target chip that was used for the simulation.
+          description: The target chip that was used for the test.
           example: tt08
+        address:
+          type: integer
+          description: The address of the design that was tested.
+          example: 0
         outputs:
           type: array
           description: |
