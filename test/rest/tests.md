@@ -88,3 +88,39 @@ Response:
     }
   ]
 }
+
+## Simulation with Repeat
+Request:
+POST /simulation
+{
+  "target": "tt08",
+  "inputs": [
+    {
+      "ui_in": 123,
+      "repeat": 3
+    }
+  ]
+}
+
+Response:
+200 OK
+{
+  "target": "tt08",
+  "outputs": [
+    {
+      "uo_out": 123,
+      "uio_out": 0,
+      "uio_oe": 0
+    },
+    {
+      "uo_out": 123,
+      "uio_out": 0,
+      "uio_oe": 0
+    },
+    {
+      "uo_out": 123,
+      "uio_out": 0,
+      "uio_oe": 0
+    }
+  ]
+}
