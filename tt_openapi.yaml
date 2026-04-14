@@ -3,9 +3,14 @@ info:
   title: Tiny Tapeout Gemini REST API
   version: 2.0.0
   description: API to perform batch testing of Tiny Tapeout hardware implementations.
+servers:
+  - url: https://api.tinytapeout.com/v2
+    description: Production API
+security: []
 paths:
   /simulation:
     post:
+      operationId: runSimulation
       summary: Run a batch test
       description: Apply a sequence of inputs and receive the resulting outputs. If target is omitted, a random board is selected.
       requestBody:
@@ -128,6 +133,8 @@ paths:
                       - uo_out: 85
                         uio_out: 0
                         uio_oe: 0
+        '400':
+          description: Bad Request. Invalid input data or parameters.
 components:
   schemas:
     SimulationRequest:
