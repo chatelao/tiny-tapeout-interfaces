@@ -18,13 +18,15 @@ def simulate():
 
     # Simple mock simulation logic: reflect inputs or return constant for now
     for input_state in inputs:
+        repeat = input_state.get("repeat", 1)
         # Mocking output logic
         output_state = {
             "uo_out": input_state.get("ui_in", 0),
             "uio_out": input_state.get("uio_in", 0),
             "uio_oe": 0
         }
-        outputs.append(output_state)
+        for _ in range(repeat):
+            outputs.append(output_state)
 
     response = {
         "target": target,

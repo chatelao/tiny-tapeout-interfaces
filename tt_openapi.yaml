@@ -199,6 +199,12 @@ components:
           enum: ['0', '1', '01', '10']
           description: Clock transition to apply ('0', '1', '01' for rising edge, '10' for falling edge).
           example: '0'
+        repeat:
+          type: integer
+          minimum: 1
+          default: 1
+          description: Number of times to repeat this input state.
+          example: 1
     OutputState:
       type: object
       description: State of the output pins after a test step.
