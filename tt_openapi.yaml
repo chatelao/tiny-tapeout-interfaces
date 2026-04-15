@@ -163,14 +163,33 @@ paths:
                     - ui_in: 20
               fp8_multiplier:
                 summary: FP8 Multiplier Example
-                description: Testing the FP8 multiply-accumulate unit.
+                description: Testing the FP8 multiply-accumulate unit using Test Sequence 1 (Standard FP8 E4M3 Dot Product).
                 value:
                   target: ttihp26a
                   address: 489
                   inputs:
-                    - ui_in: 170
+                    - ui_in: 0
+                      uio_in: 0
                       ena: true
                       rst_n: true
+                    - ui_in: 127
+                      uio_in: 0
+                      ena: true
+                      rst_n: true
+                    - ui_in: 127
+                      uio_in: 0
+                      ena: true
+                      rst_n: true
+                    - ui_in: 56
+                      uio_in: 56
+                      ena: true
+                      rst_n: true
+                      repeat: 32
+                    - ui_in: 0
+                      uio_in: 0
+                      ena: true
+                      rst_n: true
+                      repeat: 6
       responses:
         '200':
           description: Successful test execution.
@@ -228,7 +247,127 @@ paths:
                     target: ttihp26a
                     address: 489
                     outputs:
-                      - uo_out: 85
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 32
+                        uio_out: 0
+                        uio_oe: 0
+                      - uo_out: 0
                         uio_out: 0
                         uio_oe: 0
         '400':
