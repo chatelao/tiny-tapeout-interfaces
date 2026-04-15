@@ -33,7 +33,7 @@ paths:
   /sessions/{session_id}/simulation:
     post:
       operationId: runSessionSimulation
-      summary: Run a batch test within a session
+      summary: Run one or more test steps within a session
       description: Apply a sequence of inputs to the session's board and receive outputs.
       parameters:
         - name: session_id
@@ -112,7 +112,7 @@ paths:
       summary: Run a batch test
       description: Apply a sequence of inputs and receive the resulting outputs. If target is omitted, a random board is selected.
       requestBody:
-        description: Batch of input states and optional configuration.
+        description: Run a complete testsuite in one go without a session
         required: true
         content:
           application/json:
