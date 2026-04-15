@@ -16,12 +16,27 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+      - name: Lint OpenAPI Spec
+        run: npx @redocly/cli lint tt_openapi.yaml
+      - name: Run Tests
+        run: |
+          for test_dir in test/*/ ; do
+            if [ -f "${test_dir}install.sh" ] && [ -f "${test_dir}run_tests.sh" ]; then
+              echo "Running tests in ${test_dir}..."
+              cd "${test_dir}"
+              ./install.sh
+              ./run_tests.sh
+              cd -
+            fi
+          done
       - name: Build Docs
         run: npx @redocly/cli build-docs tt_openapi.yaml -o index.html
       - name: Prepare for deployment
         run: |
           mkdir -p public
           mv index.html public/
+          cp tt_*.md tt_*.v tt_*.ts README.md GEMINI.md public/
+          cp -r specifications/ public/
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
