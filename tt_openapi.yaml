@@ -8,6 +8,104 @@ servers:
     description: Production API
 security: []
 paths:
+  /sessions:
+    post:
+      operationId: createSession
+      summary: Create a new stateful session
+      description: Lock a specific board and address to start a stateful testing session.
+      requestBody:
+        description: Request to lock a board and address.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionRequest'
+      responses:
+        '201':
+          description: Session created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionResponse'
+        '400':
+          description: Bad Request.
+
+  /sessions/{session_id}/simulation:
+    post:
+      operationId: runSessionSimulation
+      summary: Run a batch test within a session
+      description: Apply a sequence of inputs to the session's board and receive outputs.
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          description: The ID of the active session.
+          schema:
+            type: string
+      requestBody:
+        description: Batch of input states for the session.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionSimulationRequest'
+      responses:
+        '200':
+          description: Successful execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulationResponse'
+        '404':
+          description: Session not found.
+
+  /sessions/{session_id}/set:
+    post:
+      operationId: setSessionSignals
+      summary: Set signals or pins
+      description: Update specific input signals or pins in the current session.
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          description: The ID of the active session.
+          schema:
+            type: string
+      requestBody:
+        description: Signal values to set.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignalSetRequest'
+      responses:
+        '200':
+          description: Signals updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutputState'
+        '404':
+          description: Session not found.
+
+  /sessions/{session_id}/reset:
+    post:
+      operationId: resetSession
+      summary: Reset the session
+      description: Reset the hardware or the session state.
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          description: The ID of the active session.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Session reset successfully.
+        '404':
+          description: Session not found.
+
   /simulation:
     post:
       operationId: runSimulation
@@ -137,6 +235,71 @@ paths:
           description: Bad Request. Invalid input data or parameters.
 components:
   schemas:
+    SessionRequest:
+      type: object
+      description: Request to lock a board and address for a session.
+      required:
+        - tt-delivers
+      properties:
+        tt-delivers:
+          type: string
+          description: The Tiny Tapeout chip or fabrication target.
+          enum: [tt01, tt02, tt03, tt04, tt05, tt06, tt07, tt08, tt09, ttihp0p2, ttihp0p4, ttihp25a, ttihp25b, ttihp26a, ttgf0p2, ttsky25a, ttsky25b, ttsky26a, ttgf26a, ttihp26b, ttsky26b, ttsky26c]
+          example: tt08
+        address:
+          type: integer
+          format: uint16
+          description: Address to select a specific circuit implementation on the board.
+          example: 0
+    SessionResponse:
+      type: object
+      description: Response containing the session ID.
+      properties:
+        session_id:
+          type: string
+          description: Unique identifier for the created session.
+          example: "sess_12345"
+    SessionSimulationRequest:
+      type: object
+      description: Request to run a batch of tests within a session.
+      properties:
+        flash:
+          type: string
+          format: byte
+          description: Base64 encoded Flash PMOD contents to be loaded.
+          example: "SGVsbG8gV29ybGQ="
+        inputs:
+          type: array
+          description: A sequence of input states to apply to the hardware.
+          items:
+            $ref: '#/components/schemas/InputState'
+    SignalSetRequest:
+      type: object
+      description: Request to set specific input signals.
+      properties:
+        ui_in:
+          type: integer
+          format: uint8
+          description: 8-bit dedicated input bus.
+          example: 85
+        uio_in:
+          type: integer
+          format: uint8
+          description: 8-bit bidirectional bus used as input.
+          example: 0
+        ena:
+          type: boolean
+          description: Enable signal.
+          example: true
+        rst_n:
+          type: boolean
+          description: Active-low reset signal.
+          example: true
+        clock:
+          type: string
+          enum: ['0', '1', '01', '10']
+          description: Clock transition to apply.
+          example: '01'
     SimulationRequest:
       type: object
       description: Request to run a batch of tests on a specific target board.
