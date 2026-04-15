@@ -43,7 +43,7 @@ paths:
           schema:
             type: string
       requestBody:
-        description: Batch of input states for the session.
+        description: Input states for the session.
         required: true
         content:
           application/json:
