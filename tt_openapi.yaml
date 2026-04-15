@@ -3,6 +3,11 @@ info:
   title: Tiny Tapeout Gemini REST API
   version: 2.0.0
   description: API to perform batch testing of Tiny Tapeout hardware implementations.
+tags:
+  - name: Sessions
+    description: Stateful operations using a session to interact with hardware.
+  - name: Simulation
+    description: Stateless batch testing operations.
 servers:
   - url: https://api.tinytapeout.com/v2
     description: Production API
@@ -10,6 +15,8 @@ security: []
 paths:
   /sessions:
     post:
+      tags:
+        - Sessions
       operationId: createSession
       summary: Create a new stateful session
       description: Lock a specific board and address to start a stateful testing session.
@@ -32,6 +39,8 @@ paths:
 
   /sessions/{session_id}/simulation:
     post:
+      tags:
+        - Sessions
       operationId: runSessionSimulation
       summary: Run one or more test steps within a session
       description: Apply a sequence of inputs to the session's board and receive outputs.
@@ -61,6 +70,8 @@ paths:
 
   /sessions/{session_id}/set:
     post:
+      tags:
+        - Sessions
       operationId: setSessionSignals
       summary: Set signals or pins
       description: Update specific input signals or pins in the current session.
@@ -90,6 +101,8 @@ paths:
 
   /sessions/{session_id}/reset:
     post:
+      tags:
+        - Sessions
       operationId: resetSession
       summary: Reset the session
       description: Reset the hardware or the session state.
@@ -108,6 +121,8 @@ paths:
 
   /simulation:
     post:
+      tags:
+        - Simulation
       operationId: runSimulation
       summary: Run a batch test
       description: Apply a sequence of inputs and receive the resulting outputs. If target is omitted, a random board is selected.
