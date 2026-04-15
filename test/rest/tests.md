@@ -124,3 +124,65 @@ Response:
     }
   ]
 }
+
+## Create Session
+Request:
+POST /sessions
+{
+  "tt-delivers": "tt08",
+  "address": 10
+}
+
+Response:
+201 Created
+{
+  "session_id": "DYNAMIC"
+}
+
+## Session Simulation
+Request:
+POST /sessions/{session_id}/simulation
+{
+  "inputs": [
+    {
+      "ui_in": 42
+    }
+  ]
+}
+
+Response:
+200 OK
+{
+  "target": "tt08",
+  "address": 10,
+  "outputs": [
+    {
+      "uo_out": 42,
+      "uio_out": 0,
+      "uio_oe": 0
+    }
+  ]
+}
+
+## Session Set Signals
+Request:
+POST /sessions/{session_id}/set
+{
+  "ui_in": 99
+}
+
+Response:
+200 OK
+{
+  "uo_out": 99,
+  "uio_out": 0,
+  "uio_oe": 0
+}
+
+## Session Reset
+Request:
+POST /sessions/{session_id}/reset
+{}
+
+Response:
+204 No Content
