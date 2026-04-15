@@ -251,6 +251,11 @@ components:
           format: uint16
           description: Address to select a specific circuit implementation on the board.
           example: 0
+        flash:
+          type: string
+          format: byte
+          description: Base64 encoded Flash PMOD contents to be loaded at session start.
+          example: "SGVsbG8gV29ybGQ="
     SessionResponse:
       type: object
       description: Response containing the session ID.

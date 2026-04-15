@@ -49,6 +49,7 @@ def create_session():
     data = request.json
     target = data.get('tt-delivers')
     address = data.get('address', 0)
+    flash = data.get('flash')
 
     if target not in TARGETS:
         return jsonify({"error": "Invalid target"}), 400
@@ -57,6 +58,7 @@ def create_session():
     sessions[session_id] = {
         "target": target,
         "address": address,
+        "flash": flash,
         "state": {
             "ui_in": 0,
             "uio_in": 0,
@@ -75,6 +77,8 @@ def session_simulation(session_id):
     data = request.json
     inputs = data.get('inputs', [])
     flash = data.get('flash')
+    if not flash:
+        flash = sessions[session_id].get('flash')
 
     outputs = simulate_logic(inputs, flash)
 

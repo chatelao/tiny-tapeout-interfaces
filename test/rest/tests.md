@@ -186,3 +186,44 @@ POST /sessions/{session_id}/reset
 
 Response:
 204 No Content
+
+## Create Session with Flash
+Request:
+POST /sessions
+{
+  "tt-delivers": "tt08",
+  "address": 20,
+  "flash": "SGVsbG8gV29ybGQ="
+}
+
+Response:
+201 Created
+{
+  "session_id": "DYNAMIC"
+}
+
+## Session Simulation with Pre-initialized Flash
+Request:
+POST /sessions/{session_id}/simulation
+{
+  "inputs": [
+    {
+      "ui_in": 10
+    }
+  ]
+}
+
+Response:
+200 OK
+{
+  "target": "tt08",
+  "address": 20,
+  "flash": "SGVsbG8gV29ybGQ=",
+  "outputs": [
+    {
+      "uo_out": 10,
+      "uio_out": 0,
+      "uio_oe": 0
+    }
+  ]
+}
