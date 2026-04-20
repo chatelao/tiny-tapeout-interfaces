@@ -18,5 +18,14 @@ This repository defines the interfaces to access "Tiny Tapeout" implementations.
 - `/test/<api-type>/run_tests.sh` : To
 - `/test/<api-type>/tests.md` : Appropriate test files with request / response pairs human readable, one test per chapter
 
-## Housekeeping
-- `/housekeeping/TOOL_WISHLIST.md` : Add tools to this list you needed to install during the work.
+# Config
+- Create every new issues with the label "jules" by default
+  - Add the matching template
+  - Disable the creation of empty issues without labels
+- Add every "jules" labels issues to the project https://github.com/users/chatelao/projects/14
+
+# ROADMAP rules
+- Create and maintain a ROADMAP.md with checkboxes for tasks
+  - Insert new tasks on the top of the list
+  - Execute from bottom to top
+  - Add a timestamp of completion on the end of each task when done
